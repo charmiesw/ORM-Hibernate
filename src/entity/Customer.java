@@ -1,56 +1,42 @@
 package entity;
 
-
-import embedded.MobileNumber;
-import embedded.NameIdentifier;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "customer") // Can define the name of the table
-
+@Table(name = "customer")
 public class Customer {
-    @Id // Defining this column as the primary key column
-    @Column(name = "cus_id") // Can define the column name
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cus_id")
     private int id;
 
-    @Column(name = "cus_name")
-    private NameIdentifier name;
+    @Column( name = "cus_name")
+    private String name;
 
-    @Transient
     @Column(name = "cus_address")
     private String address;
 
-    @Column(name = "cus_salary")
-    private double salary;
-
-    @Transient
-    @Column(name = "cus_age")
-    private int age;
-
-    @ElementCollection
-    @CollectionTable(name = "customer_mobile_numbers", joinColumns = @JoinColumn(name = "cus_id"))
-    private List<MobileNumber> mobileNumbers = new ArrayList<>();
-
-    @CreationTimestamp
-    private Timestamp createdDateTime;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
+    private List<Orders> orders = new ArrayList<>();     //By this we define the 1:M relationship from customer to orders
 
     public Customer() {
     }
 
-    public Customer(int id, NameIdentifier name, String address, double salary, int age, List<MobileNumber> mobileNumbers, Timestamp createdDateTime) {
+    public Customer(int id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.salary = salary;
-        this.age = age;
-        this.mobileNumbers = mobileNumbers;
-        this.createdDateTime = createdDateTime;
+    }
+
+    public Customer(int id, String name, String address, List<Orders> orders) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.orders = orders;
     }
 
     public int getId() {
@@ -61,11 +47,11 @@ public class Customer {
         this.id = id;
     }
 
-    public NameIdentifier getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(NameIdentifier name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -77,48 +63,21 @@ public class Customer {
         this.address = address;
     }
 
-    public double getSalary() {
-        return salary;
+    public List<Orders> getOrders() {
+        return orders;
     }
 
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public List<MobileNumber> getMobileNumbers() {
-        return mobileNumbers;
-    }
-
-    public void setMobileNumbers(List<MobileNumber> mobileNumbers) {
-        this.mobileNumbers = mobileNumbers;
-    }
-
-    public Timestamp getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(Timestamp createdDateTime) {
-        this.createdDateTime = createdDateTime;
+    public void setOrders(List<Orders> orders) {
+        this.orders = orders;
     }
 
     @Override
     public String toString() {
         return "Customer{" +
                 "id=" + id +
-                ", name=" + name +
+                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", salary=" + salary +
-                ", age=" + age +
-                //", mobileNumbers=" + mobileNumbers +
-                ", createdDateTime=" + createdDateTime +
+               // ", orders=" + orders +
                 '}';
     }
 }

@@ -1,9 +1,6 @@
-import config.SessionFactoryConfig;
 import embedded.MobileNumber;
 import embedded.NameIdentifier;
 import entity.Customer;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import repository.CustomerRepository;
 
 import java.util.ArrayList;
@@ -17,41 +14,42 @@ public class Appinitializer {
         customerRepository.saveCustomer(getCustomer());
 
         // 02. GET
-        System.out.println("\n======GET======");
-        customerRepository = new CustomerRepository();
-        Customer customer = customerRepository.getCustomer(getCustomer().getId());
-        System.out.println("Customer : " + customer);
+//        System.out.println("\n======GET======");
+//        customerRepository = new CustomerRepository();
+//        Customer customer = customerRepository.getCustomer(getCustomer().getId());
+//        System.out.println("Customer : " + customer);
+
+        CustomerRepository customerRepository1 = new CustomerRepository();
+        customerRepository1.getAllCustomersNative();
+
+        CustomerRepository customerRepository2 = new CustomerRepository();
+        List<Customer> customerList = customerRepository2.getAllCustomersJPQL();
+        for (Customer customer : customerList) {
+            System.out.println(customer);
+        }
 
         // 03. UPDATE
-        /*System.out.println("\n======UPDATE======");
-        Session updateSession = SessionFactoryConfig.getInstance().getSession();
-        Transaction updateTransaction = updateSession.beginTransaction();
-        Customer updateCustomer = updateSession.get(Customer.class, 001);
-        updateCustomer.setAddress("Matara");
-        updateSession.update(updateCustomer);
-        updateTransaction.commit();
-        System.out.println("Updated customer : " + updateCustomer);
-        updateSession.close();
-
-        // 04. DELETE
-        System.out.println("\n======DELETE======");
-        Session deleteSession = SessionFactoryConfig.getInstance().getSession();
-        Transaction deleteTransaction = deleteSession.beginTransaction();
-        Customer deleteCustomer = deleteSession.get(Customer.class, 001);
-        deleteSession.delete(deleteCustomer);
-        deleteTransaction.commit();
-        System.out.println("Deleted Customer : " + deleteCustomer);
-        deleteSession.close();*/
+//        System.out.println("\n======UPDATE======");
+//        customerRepository = new CustomerRepository();
+//        customer.setAddress("Matara");
+//        customerRepository.updateCustomer(customer);
+//        System.out.println("Customer : " + customer);
+//
+//        // 04. DELETE
+//        System.out.println("\n======DELETE======");
+//        customerRepository = new CustomerRepository();
+//        customerRepository.deleteCustomer(customer);
+//        System.out.println("Customer : " + customer);
     }
 
     private static Customer getCustomer() {
         Customer customer = new Customer();
-        customer.setId(001);
-        customer.setName(getNameIdentifier());
+        customer.setId(1);
+        customer.setName("Charmie");
         customer.setAddress("Galle");
-        customer.setMobileNumbers(getMobileNumbers());
-        customer.setSalary(25000.00);
-        customer.setAge(21);
+//        customer.setMobileNumbers(getMobileNumbers());
+//        customer.setSalary(25000.00);
+//        customer.setAge(21);
         return customer;
     }
 

@@ -4,6 +4,10 @@ import config.SessionFactoryConfig;
 import entity.Customer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 public class CustomerRepository {
     private final Session session;
@@ -47,7 +51,44 @@ public class CustomerRepository {
             session.close();
             return true;
         } catch (Exception e) {
-
+            transaction.rollback();
+            session.close();
+            e.printStackTrace();
+            return false;
         }
+    }
+
+    public boolean deleteCustomer(Customer customer) {
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.delete(customer);
+            transaction.commit();
+            session.close();
+            return true;
+        } catch (Exception e) {
+            transaction.rollback();
+            session.close();
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Object[]> getAllCustomersNative() {
+        String sql = "SELECT * FROM customer";
+        NativeQuery query = session.createSQLQuery(sql);
+        List<Object[]> list = query.list();
+        for (Object customer : list) {
+            System.out.println(customer);
+        }
+        session.close();
+        return list;
+    }
+
+    public List<Customer> getAllCustomersJPQL() {
+        String sql = "SELECT C FROM Customer AS C";
+        Query query = session.createQuery(sql);
+        List list = query.list();
+        session.close();
+        return list;
     }
 }

@@ -117,7 +117,7 @@ public class Customer {
                 ", address='" + address + '\'' +
                 ", salary=" + salary +
                 ", age=" + age +
-                ", mobileNumbers=" + mobileNumbers +
+                //", mobileNumbers=" + mobileNumbers +
                 ", createdDateTime=" + createdDateTime +
                 '}';
     }

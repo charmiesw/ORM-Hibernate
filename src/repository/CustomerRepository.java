@@ -38,4 +38,16 @@ public class CustomerRepository {
             throw e;
         }
     }
+
+    public boolean updateCustomer(Customer customer) {
+        Transaction transaction = session.beginTransaction();
+        try {
+            session.update(customer);
+            transaction.commit();
+            session.close();
+            return true;
+        } catch (Exception e) {
+
+        }
+    }
 }

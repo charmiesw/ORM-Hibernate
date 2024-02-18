@@ -18,10 +18,9 @@ public class Appinitializer {
 
         // 02. GET
         System.out.println("\n======GET======");
-        Session getSession = SessionFactoryConfig.getInstance().getSession();
-        Customer existingCustomer = getSession.get(Customer.class, 001);
-        System.out.println("Existing customer : " + existingCustomer);
-        getSession.close();
+        customerRepository = new CustomerRepository();
+        Customer customer = customerRepository.getCustomer(getCustomer().getId());
+        System.out.println("Customer : " + customer);
 
         // 03. UPDATE
         /*System.out.println("\n======UPDATE======");

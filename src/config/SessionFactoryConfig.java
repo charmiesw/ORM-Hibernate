@@ -14,7 +14,7 @@ public class SessionFactoryConfig {
     private final SessionFactory sessionFactory;
 
     private SessionFactoryConfig() {
-        //sessionFactory = new MetadataSources(new StandardServiceRegistryBuilder().configure().build()).addAnnotatedClass(Customer.class).getMetadataBuilder().build().buildSessionFactory();
+        //Create a session factory
         sessionFactory = new Configuration().configure().
                 addAnnotatedClass(Customer.class).
                 addAnnotatedClass(Item.class).

@@ -1,12 +1,14 @@
 import embedded.MobileNumber;
 import embedded.NameIdentifier;
 import entity.Customer;
+import entity.Orders;
+import projection.CustomerProjection;
 import repository.CustomerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Appinitializer {
+public class AppInitializer {
     public static void main(String[] args) {
         // 01. SAVE
         System.out.println("\n======SAVE======");
@@ -23,9 +25,27 @@ public class Appinitializer {
         customerRepository1.getAllCustomersNative();
 
         CustomerRepository customerRepository2 = new CustomerRepository();
-        List<Customer> customerList = customerRepository2.getAllCustomersJPQL();
-        for (Customer customer : customerList) {
-            System.out.println(customer);
+        List<Customer> customerListJpql = customerRepository2.getAllCustomersJPQL();
+        for (Customer customer : customerListJpql) {
+            System.out.println("Customer jpql : " + customer);
+        }
+
+        CustomerRepository customerRepository3 = new CustomerRepository();
+        List<Orders> ordersList = customerRepository3.getOrdersByCustomerId(1);
+        for (Orders orders : ordersList) {
+            System.out.println("Orders : " + orders);
+        }
+
+        CustomerRepository customerRepository4 = new CustomerRepository();
+        List<Customer> customerListHql = customerRepository4.getAllCustomerHQL();
+        for (Customer customer : customerListHql) {
+            System.out.println("Customer hql : " + customer);
+        }
+
+        CustomerRepository customerRepository5 = new CustomerRepository();
+        List<CustomerProjection> customerProjectionList = customerRepository5.getCustomerProjection();
+        for (CustomerProjection customerProjection : customerProjectionList) {
+            System.out.println("Customer projection : " + customerProjection);
         }
 
         // 03. UPDATE
@@ -44,9 +64,9 @@ public class Appinitializer {
 
     private static Customer getCustomer() {
         Customer customer = new Customer();
-        customer.setId(1);
-        customer.setName("Charmie");
-        customer.setAddress("Galle");
+        customer.setId(2);
+        customer.setName("Vihara");
+        customer.setAddress("Matara");
 //        customer.setMobileNumbers(getMobileNumbers());
 //        customer.setSalary(25000.00);
 //        customer.setAge(21);

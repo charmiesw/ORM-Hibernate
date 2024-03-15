@@ -2,10 +2,12 @@ package repository;
 
 import config.SessionFactoryConfig;
 import entity.Customer;
+import entity.Orders;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
+import projection.CustomerProjection;
 
 import java.util.List;
 
@@ -86,6 +88,35 @@ public class CustomerRepository {
 
     public List<Customer> getAllCustomersJPQL() {
         String sql = "SELECT C FROM Customer AS C";
+        Query query = session.createQuery(sql);
+        List list = query.list();
+        session.close();
+        return list;
+    }
+
+    public List<Orders> getOrdersByCustomerId(int cusId) {
+        String sql = "SELECT O FROM Orders AS O\n" +
+                "INNER JOIN Customer AS C ON O.customer.id = C.id\n" +
+                "WHERE O.customer.id = :cus_id"; //:cus_id <- named query parameter
+        Query query = session.createQuery(sql);
+        query.setParameter("cus_id", cusId); //setting the value of cusId to cus_id
+        List<Orders> list = query.list();
+        session.close();
+        return list;
+    }
+
+    public List<Customer> getAllCustomerHQL() {
+        String sql = "FROM Customer";
+        Query query = session.createQuery(sql);
+        List<Customer> customerList = query.list();
+        session.close();
+        return customerList;
+    }
+
+    public List<CustomerProjection> getCustomerProjection() {
+        String sql = "SELECT\n" +
+                "new projection.CustomerProjection(C.id, C.name)\n" +
+                "FROM Customer AS C";
         Query query = session.createQuery(sql);
         List list = query.list();
         session.close();
